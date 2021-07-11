@@ -22,6 +22,7 @@ buff = mandlelbrot.madlebrot((80, 160), "r", (-2, 1, -1, 1))
 
 ## How to Build
 
+The Bouncing Balls example uses the custom draw circle functions of my fork of micropython. As is added as a submodule you can simply to get my fork.
 ```
 git submodule update --init -- micropython
 ```
