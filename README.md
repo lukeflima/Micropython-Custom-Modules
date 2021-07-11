@@ -3,13 +3,13 @@
 Custom modules created with MicroPython C API.
 
 
-## Madelbrot
+## Mandelbrot
 
-A Madelbrot interface to use to draw on display.
+A Mandelbrot interface to use to draw on display.
 
-### madelbrot((width: int, height: int), colour: str, (real_start: float, real_end: float, imaginary_start: float, imaginary_end: float)) -> bytearray
+### mandelbrot((width: int, height: int), colour: str, (real_start: float, real_end: float, imaginary_start: float, imaginary_end: float)) -> bytearray
 
-It allocates a buffer with `width * height * 2` bytes of size and used to return calculated Madelbrot as bytearray.
+It allocates a buffer with `width * height * 2` bytes of size and used to return calculated Mandelbrot as bytearray.
 Colour options are "r" for red, "g" for green, and "b" for blue. Defauts to blue if passed wrong value.
 
 

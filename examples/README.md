@@ -1,10 +1,10 @@
 # Examples
 
-## Draw Madelbrot
+## Draw Mandelbrot
 
-Uses the Madelbrot module created to draw it on an ST7735 display.
+Uses the Mandelbrot module created to draw it on an ST7735 display.
 
-![Madelbrot draw on display](img/madelbrot.png)
+![Mandelbrot draw on display](img/mandelbrot.png)
 
 ## Boucing Balls
 

@@ -32,8 +32,8 @@ STATIC int get_colour(int colour, char colour_base) {
     return TFTColor(0, 0, colour);
 }
 
-// Madelbrot Python interface
-STATIC mp_obj_t madelbrot(
+// Mandelbrot Python interface
+STATIC mp_obj_t mandelbrot(
                           mp_obj_t resolution_obj, 
                           mp_obj_t colour_obj, 
                           mp_obj_t boundries_obj
@@ -83,20 +83,20 @@ STATIC mp_obj_t madelbrot(
 }
 
 // Define a Python reference to the function above
-STATIC MP_DEFINE_CONST_FUN_OBJ_3(madelbrot_obj, madelbrot);
+STATIC MP_DEFINE_CONST_FUN_OBJ_3(mandelbrot_obj, mandelbrot);
 
-STATIC const mp_rom_map_elem_t madelbrot_module_globals_table[] = {
-    { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_madelbrot) },
-    { MP_ROM_QSTR(MP_QSTR_madelbrot), MP_ROM_PTR(&madelbrot_obj) },
+STATIC const mp_rom_map_elem_t mandelbrot_module_globals_table[] = {
+    { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_mandelbrot) },
+    { MP_ROM_QSTR(MP_QSTR_mandelbrot), MP_ROM_PTR(&mandelbrot_obj) },
 };
-STATIC MP_DEFINE_CONST_DICT(madelbrot_module_globals, madelbrot_module_globals_table);
+STATIC MP_DEFINE_CONST_DICT(mandelbrot_module_globals, mandelbrot_module_globals_table);
 
 // Define module object.
-const mp_obj_module_t madelbrot_user_cmodule = {
+const mp_obj_module_t mandelbrot_user_cmodule = {
     .base = { &mp_type_module },
-    .globals = (mp_obj_dict_t *)&madelbrot_module_globals,
+    .globals = (mp_obj_dict_t *)&mandelbrot_module_globals,
 };
 
 // Register the module to make it available in Python.
 // Note: the "1" in the third argument means this module is always enabled.
-MP_REGISTER_MODULE(MP_QSTR_madelbrot, madelbrot_user_cmodule, 1);
+MP_REGISTER_MODULE(MP_QSTR_mandelbrot, mandelbrot_user_cmodule, 1);

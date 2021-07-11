@@ -2,7 +2,7 @@ from ST7735 import TFT,TFTColor
 from machine import SPI, Pin, Timer
 from micropython import const, 
 from random import random, choice
-from madelbrot import madelbrot
+from mandelbrot import mandelbrot
 import gc
 
 spi1_sck=const(10)
@@ -34,7 +34,7 @@ def get_colour(colour, colour_base):
 
 
 @micropython.native
-def draw_madelbrot():
+def draw_mandelbrot():
     global tft
     
     RealStart = -2 * random()
@@ -43,7 +43,7 @@ def draw_madelbrot():
     ImaginaryEnd = 1 * random()
     colour_base = choice(colour_palets)
     
-    buff = madelbrot((disp_width, disp_height), colour_base, (RealStart, RealEnd, ImaginaryStart, ImaginaryEnd))
+    buff = mandelbrot((disp_width, disp_height), colour_base, (RealStart, RealEnd, ImaginaryStart, ImaginaryEnd))
     
     tft.image(0, 0, disp_width - 0, disp_height - 0, buff)
     tft.update()
@@ -52,4 +52,4 @@ def draw_madelbrot():
 
 
 if __name__ == "__main__":
-    draw_madelbrot()
+    draw_mandelbrot()
