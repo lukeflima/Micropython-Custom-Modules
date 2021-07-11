@@ -17,7 +17,7 @@ Colour options are "r" for red, "g" for green, and "b" for blue. Defauts to blue
 
 ```py
 import mandlebrot
-buff = mandlelbrot.madlebrot((80, 160), "r", (-2, 1, -1, 1))
+buff = mandlelbrot.mandlebrot((80, 160), "r", (-2, 1, -1, 1))
 ```
 
 ## How to Build
