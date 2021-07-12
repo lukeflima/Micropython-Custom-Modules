@@ -65,10 +65,24 @@ STATIC void madelbrot_write_into(
 }
 
 // Mandelbrot Python interface
-STATIC void _mandelbrot_into(uint width, uint height, uint8_t* buffer, uint iterations, size_t n_args, const mp_obj_t *args) 
+STATIC uint _mandelbrot_into(uint8_t* buffer, size_t buffer_len, uint iterations, size_t n_args, const mp_obj_t *args) 
 {
     // Extract the tuple from the MicroPython input object
-    mp_obj_t *tuple; 
+    mp_obj_t *tuple;  
+    
+    //Tuple of resolution
+    mp_obj_get_array_fixed_n(args[0], 2, &tuple);
+    int width = mp_obj_get_int(tuple[0]);
+    int height = mp_obj_get_int(tuple[1]);
+    
+    int diplay_size_buffer = width * height * 2;
+
+    if(buffer_len == 0) {
+        buffer = m_malloc(diplay_size_buffer);
+    }
+    else if(buffer_len != diplay_size_buffer) {
+        mp_raise_ValueError(MP_ERROR_TEXT("Buffer must have size of width * height * 2"));
+    }
 
     char * colour_base = (char *) mp_obj_str_get_str(args[1]);
 
@@ -80,27 +94,21 @@ STATIC void _mandelbrot_into(uint width, uint height, uint8_t* buffer, uint iter
     float imaginary_end = mp_obj_get_float(tuple[3]);
 
     madelbrot_write_into(width, height, real_start, real_end, imaginary_start, imaginary_end, iterations, colour_base[0], buffer);
+    
+    return diplay_size_buffer;
 }
 
 // Mandelbrot Python interface
 STATIC mp_obj_t mandelbrot(size_t n_args, const mp_obj_t *args) 
 {
-    mp_obj_t *tuple; 
-    
-    //Tuple of resolution
-    mp_obj_get_array_fixed_n(args[0], 2, &tuple);
-    uint width = mp_obj_get_int(tuple[0]);
-    uint height = mp_obj_get_int(tuple[1]);
-
-    uint diplay_size_buffer = width * height * 2;
+    uint8_t* buffer = NULL;
 
     uint iterations = 10;
     if(n_args == 4) {
         iterations = mp_obj_get_int(args[3]);
     }
 
-    uint8_t* buffer = (uint8_t*) m_malloc(diplay_size_buffer);
-    _mandelbrot_into(width, height, buffer, iterations, n_args, args);
+    uint diplay_size_buffer = _mandelbrot_into(buffer, 0, iterations, n_args, args);
 
     return mp_obj_new_bytearray_by_ref(diplay_size_buffer, buffer);
 }
@@ -110,19 +118,9 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mandelbrot_obj, 3, 4, mandelbrot);
 // Mandelbrot write into buffer Python interface. Avoid allocation
 STATIC mp_obj_t mandelbrot_into(size_t n_args, const mp_obj_t *args) 
 {
-    mp_obj_t *tuple; 
-    
-    //Tuple of resolution
-    mp_obj_get_array_fixed_n(args[0], 2, &tuple);
-    int width = mp_obj_get_int(tuple[0]);
-    int height = mp_obj_get_int(tuple[1]);
-
     //Buffer to write into
     mp_buffer_info_t bufinfo;
     mp_get_buffer_raise(args[3], &bufinfo, MP_BUFFER_WRITE);
-    if(bufinfo.len != width * height * 2) {
-        mp_raise_ValueError(MP_ERROR_TEXT("Buffer must have size of width * height * 2"));
-    }
 
     //Number of iterations
     uint iterations = 10;
@@ -130,7 +128,7 @@ STATIC mp_obj_t mandelbrot_into(size_t n_args, const mp_obj_t *args)
         iterations = mp_obj_get_int(args[4]);
     }
 
-    _mandelbrot_into(width, height, bufinfo.buf, iterations, n_args, args);
+    _mandelbrot_into(bufinfo.buf, bufinfo.len, iterations, n_args, args);
 
     return mp_obj_new_int(bufinfo.len);
 }
