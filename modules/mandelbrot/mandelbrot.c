@@ -3,18 +3,18 @@
 #include "py/runtime.h"
 
 // Convert RGB to RGB565
-STATIC int rgb_to_rgb565(int r, int g, int b) {
+STATIC uint16_t rgb_to_rgb565(uint8_t r, uint8_t g, uint8_t b) {
      return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
 }
 
 //Calculate Mandelbrot
-STATIC int mandelbrot_internal(float c_real, float c_imaginary, uint iterations) {
+STATIC uint mandelbrot_internal(float c_real, float c_imaginary, uint iterations) {
     float z_real = 0;
     float z_imaginary = 0;
     float z_real2 = 0;
     float z_imaginary2 = 0;
 
-    uint8_t n = 0;
+    uint n = 0;
     while (z_real2 + z_imaginary2 <= 4 && n < iterations) {
         z_imaginary = (z_real + z_real) * z_imaginary + c_imaginary;
         z_real = z_real2 - z_imaginary2 + c_real;
@@ -26,7 +26,7 @@ STATIC int mandelbrot_internal(float c_real, float c_imaginary, uint iterations)
 }
 
 // Choose what color to return
-STATIC int get_colour(int colour, char colour_base) {
+STATIC uint16_t get_colour(uint colour, char colour_base) {
     if(colour_base == 0x72){ //"r"
         return rgb_to_rgb565(colour, 0, 0);
     }
@@ -49,7 +49,8 @@ STATIC void madelbrot_write_into(
                             ) 
 {
     float real_part, imaginary_part;
-    uint m, colour;
+    uint m;
+    uint16_t colour;
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             real_part = real_start + ((float) x / (float) width) * (real_end - real_start);
