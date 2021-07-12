@@ -39,20 +39,21 @@ class Ball:
   
 
 def create_random_ball():
-    rad = random.randint(0, 10) + 4
-    drad = rad + (disp_width - 2 * rad)
-    dx = dy = max((14 - rad) / 2, 1)
+    rad = random.randint(0, 10) + 3
+    dx = dy = (14 - rad) / 2
     r = random.randint(0, 255)
     g = random.randint(0, 255)
     b = random.randint(0, 255)
     return Ball(
-                random.randint(rad, drad),
-                random.randint(rad, drad),
+                random.randint(rad, rad + (disp_width - 2 * rad)),
+                random.randint(rad, rad + (disp_height - 2 * rad)),
                 rad,
                 dx,
                 dy,
                 TFTColor(r, g, b),
             )
+
+
 
 
 @micropython.native
