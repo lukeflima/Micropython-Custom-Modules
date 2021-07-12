@@ -2,7 +2,6 @@
 // Include the header file to get access to the MicroPython API
 #include "py/runtime.h"
 #include <complex.h>
-#include <stdio.h>
 
 // Convert RGB to RGB565
 STATIC int rgb_to_rgb565(int r, int g, int b) {
