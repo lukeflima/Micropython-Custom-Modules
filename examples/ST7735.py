@@ -169,7 +169,8 @@ class TFT(object) :
     self.spi = spi
     self.colorData = bytearray(2)
     self.windowLocData = bytearray(4)
-    self.fbuf = framebuf.FrameBuffer(bytearray(self._size[0] * self._size[1] * 2), self._size[0], self._size[1], framebuf.RGB565)
+    self.buf = bytearray(self._size[0] * self._size[1] * 2)
+    self.fbuf = framebuf.FrameBuffer(self.buf, self._size[0], self._size[1], framebuf.RGB565)
     self.fbuf.fill(self.BLACK)
     self.autoupdate = False
     
