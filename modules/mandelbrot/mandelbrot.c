@@ -1,25 +1,25 @@
 
 // Include the header file to get access to the MicroPython API
 #include "py/runtime.h"
-#include <complex.h>
 
 // Convert RGB to RGB565
 STATIC int rgb_to_rgb565(int r, int g, int b) {
      return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
 }
 
-STATIC float sqrd_cabs(float complex c) {
-    float real = creal(c);
-    float imaginary = cimag(c);
-    return real * real + imaginary + imaginary;
-}
-
 //Calculate Mandelbrot
-STATIC int mandelbrot_internal(float complex c, uint iterations) {
-    float complex z = 0 * I;
+STATIC int mandelbrot_internal(float c_real, float c_imaginary, uint iterations) {
+    float z_real = 0;
+    float z_imaginary = 0;
+    float z_real2 = 0;
+    float z_imaginary2 = 0;
+
     uint8_t n = 0;
-    while (sqrd_cabs(z) <= 4 && n < iterations) {
-        z = (z*z) + c;
+    while (z_real2 + z_imaginary2 <= 4 && n < iterations) {
+        z_imaginary = (z_real + z_real) * z_imaginary + c_imaginary;
+        z_real = z_real2 - z_imaginary2 + c_real;
+        z_real2 = z_real * z_real;
+        z_imaginary2 = z_imaginary * z_imaginary;
         n += 1;
     }
     return n;
@@ -49,14 +49,12 @@ STATIC void madelbrot_readfrom(
                             ) 
 {
     float real_part, imaginary_part;
-    float complex c;
     int m, colour;
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             real_part = real_start + ((float) x / (float) width) * (real_end - real_start);
             imaginary_part = imaginary_start + ((float) y / (float) height) * (imaginary_end - imaginary_start);
-            c = real_part + imaginary_part * I;
-            m =  mandelbrot_internal(c, iterations);
+            m =  mandelbrot_internal(real_part, imaginary_part, iterations);
             colour = 255 - (int)((m * 255) / iterations);
             colour = get_colour(colour, colour_base);
             buffer[(x + width*y)*2 + 1] = colour & 0xFF; 
