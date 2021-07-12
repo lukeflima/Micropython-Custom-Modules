@@ -28,7 +28,7 @@ Using pre-allocated buffer
 ```py
 import mandlebrot
 buff = bytearray(80 * 160 * 2)
-mandlelbrot.mandlebrot((80, 160), "r", (-2, 1, -1, 1), buff)
+mandlelbrot.mandlebrot_into((80, 160), "r", (-2, 1, -1, 1), buff)
 ```
 
 ## How to Build
