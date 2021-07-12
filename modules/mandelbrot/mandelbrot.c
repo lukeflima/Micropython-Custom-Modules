@@ -9,11 +9,17 @@ STATIC int rgb_to_rgb565(int r, int g, int b) {
      return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
 }
 
+STATIC float sqrd_cabs(float complex c) {
+    float real = creal(c);
+    float imaginary = cimag(c);
+    return real * real + imaginary + imaginary;
+}
+
 //Calculate Mandelbrot
 STATIC int mandelbrot_internal(float complex c, uint iterations) {
     float complex z = 0 * I;
     uint8_t n = 0;
-    while (cabs(z) <= 2 && n < iterations) {
+    while (sqrd_cabs(z) <= 4 && n < iterations) {
         z = (z*z) + c;
         n += 1;
     }
