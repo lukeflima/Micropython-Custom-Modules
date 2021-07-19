@@ -1,5 +1,5 @@
 from ST7735 import TFT,TFTColor
-from machine import SPI, Pin, Timer
+from machine import SPI
 from micropython import const, 
 from random import random, choice
 from mandelbrot import mandelbrot, mandelbrot_into
